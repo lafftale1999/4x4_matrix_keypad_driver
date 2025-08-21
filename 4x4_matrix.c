@@ -14,8 +14,8 @@ static char _4x4_matrix_layout[4][4] =
     {'*', '0', '#', 'D'}
 };
 
-static uint8_t row_pins[] = {GPIO_NUM_26, GPIO_NUM_25, GPIO_NUM_17, GPIO_NUM_16};
-static uint8_t col_pins[] = {GPIO_NUM_27, GPIO_NUM_14, GPIO_NUM_12, GPIO_NUM_13};
+static uint8_t row_pins[4] = {0};
+static uint8_t col_pins[4] = {0};
 
 static char _4x4_matrix_wait_for_keypress() {
     while (1) {
@@ -58,9 +58,15 @@ char _4x4_matrix_get_key_press() {
     return _4x4_matrix_wait_for_keypress();
 }
 
-uint8_t _4x4_matrix_init() {
-
+/**
+ * @param row_p array of ESP32 pins connected to rows
+ * @param col_p array of ESP32 pins connected to columns
+ * @return 0 for success.
+ */
+uint8_t _4x4_matrix_init(const uint8_t row_p[4], const uint8_t col_p[4]) {
     for (uint8_t row = 0; row < _4X4_MATRIX_KEYPAD_ROWS; row++) {
+        row_pins[row] = row_p[row];
+
         const gpio_config_t pin = {
             .mode = GPIO_MODE_OUTPUT,
             .pin_bit_mask = (1ULL << row_pins[row]),
@@ -75,6 +81,8 @@ uint8_t _4x4_matrix_init() {
 
 
     for (uint8_t col = 0; col < _4X4_MATRIX_KEYPAD_COLUMNS; col++) {
+        col_pins[col] = col_p[col];
+        
         const gpio_config_t pin = {
             .mode = GPIO_MODE_INPUT,
             .pin_bit_mask = (1ULL << col_pins[col]),

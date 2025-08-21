@@ -8,7 +8,7 @@
 #include "driver/gpio.h"
 
 void _4x4_matrix_scan_keys(char* buf, uint8_t buf_len);
-uint8_t _4x4_matrix_init();
+uint8_t _4x4_matrix_init(const uint8_t row_p[4], const uint8_t col_p[4]);
 char _4x4_matrix_get_key_press();
 
 #endif
