@@ -1,4 +1,5 @@
 #include "include/4x4_matrix.h"
+#include "app_events.h"
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
@@ -16,6 +17,8 @@ static char _4x4_matrix_layout[4][4] =
 
 static uint8_t row_pins[4] = {0};
 static uint8_t col_pins[4] = {0};
+static QueueHandle_t app_queue;
+static bool task_is_running = false;
 
 static char _4x4_matrix_wait_for_keypress() {
     while (1) {
@@ -63,7 +66,7 @@ char _4x4_matrix_get_key_press() {
  * @param col_p array of ESP32 pins connected to columns
  * @return 0 for success.
  */
-uint8_t _4x4_matrix_init(const uint8_t row_p[4], const uint8_t col_p[4]) {
+uint8_t _4x4_matrix_init(const uint8_t row_p[4], const uint8_t col_p[4], QueueHandle_t app_q) {
     for (uint8_t row = 0; row < _4X4_MATRIX_KEYPAD_ROWS; row++) {
         row_pins[row] = row_p[row];
 
@@ -94,5 +97,26 @@ uint8_t _4x4_matrix_init(const uint8_t row_p[4], const uint8_t col_p[4]) {
         ESP_ERROR_CHECK(gpio_config(&pin));
     }
 
+    if(!app_queue && app_q != NULL) {
+        app_queue = app_q;
+    }
+
     return 0;
+}
+
+void _4x4_matrix_task(void *args) {
+    task_is_running = true;
+    
+    char key;
+
+    while(task_is_running) {
+        key = _4x4_matrix_get_key_press();
+
+        app_handle_t event = {
+            .event_type = EV_CHAR_RECEIVED,
+            .key.key_pressed = key
+        };
+
+        xQueueSend(app_queue, &event, portMAX_DELAY);
+    }
 }

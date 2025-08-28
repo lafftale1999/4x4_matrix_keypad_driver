@@ -6,9 +6,11 @@
 
 #include <stdio.h>
 #include "driver/gpio.h"
+#include "freertos/queue.h"
 
 void _4x4_matrix_scan_keys(char* buf, uint8_t buf_len);
-uint8_t _4x4_matrix_init(const uint8_t row_p[4], const uint8_t col_p[4]);
+uint8_t _4x4_matrix_init(const uint8_t row_p[4], const uint8_t col_p[4], QueueHandle_t app_q);
 char _4x4_matrix_get_key_press();
+void _4x4_matrix_task(void *args);
 
 #endif
