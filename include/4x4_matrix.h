@@ -5,7 +5,10 @@
 #define _4X4_MATRIX_KEYPAD_ROWS             4
 
 #include <stdio.h>
-#include "driver/gpio.h"
+#include <stdint.h>
+#include <stdbool.h>
+
+#include "freertos/FreeRTOS.h"   // must come before queue.h
 #include "freertos/queue.h"
 
 void _4x4_matrix_scan_keys(char* buf, uint8_t buf_len);
