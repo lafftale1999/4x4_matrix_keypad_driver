@@ -8,11 +8,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#include "freertos/FreeRTOS.h"   // must come before queue.h
-#include "freertos/queue.h"
-
 void _4x4_matrix_scan_keys(char* buf, uint8_t buf_len);
-uint8_t _4x4_matrix_init(const uint8_t row_p[4], const uint8_t col_p[4], QueueHandle_t app_q);
+uint8_t _4x4_matrix_init(const uint8_t row_p[4], const uint8_t col_p[4]);
 char _4x4_matrix_get_key_press();
 void _4x4_matrix_task(void *args);
 
