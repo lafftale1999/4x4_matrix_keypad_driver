@@ -14,8 +14,6 @@ static char _4x4_matrix_layout[4][4] =
 
 static uint8_t row_pins[4] = {0};
 static uint8_t col_pins[4] = {0};
-static QueueHandle_t app_queue;
-static bool task_is_running = false;
 
 static char _4x4_matrix_wait_for_keypress() {
     while (1) {
