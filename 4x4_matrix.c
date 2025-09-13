@@ -4,6 +4,9 @@
 #include "esp_err.h"
 #include "esp_log.h"
 
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+
 static char _4x4_matrix_layout[4][4] =
 {
     {'1', '2', '3', 'A'},
